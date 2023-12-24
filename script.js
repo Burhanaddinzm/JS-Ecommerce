@@ -108,7 +108,7 @@ const displayProducts = () => {
       .map((name) => name[0].toUpperCase() + name.slice(1))
       .join(" ");
 
-    productsEl.innerHTML += `<div class="col-span-4 cursor-pointer">
+    productsEl.innerHTML += `<div class="col-span-4 cursor-pointer productItem">
     <a href="./productPage/product.html">
     <div class="mb-4 border border-neutral-200 rounded-lg">
     <img
@@ -129,6 +129,14 @@ const displayProducts = () => {
     </div>
     </a>
     </div>`;
+
+    const productItems = document.querySelectorAll(".productItem");
+    productItems.forEach((productItem, index) => {
+      productItem.addEventListener("click", (event) => {
+        const selectedProduct = filteredProducts[index];
+        localStorage.setItem("product", JSON.stringify(selectedProduct));
+      });
+    });
   });
   productsCount.textContent = filteredProducts.length;
 };
