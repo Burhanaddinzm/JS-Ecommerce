@@ -93,7 +93,7 @@ const displayProducts = () => {
 
     const sizeCondition =
       filteredSizes.length === 0 ||
-      filteredSizes.some((size) => product.sizes.includes(size));
+      filteredSizes.every((size) => product.sizes.includes(size));
 
     return categoryCondition && colorCondition && sizeCondition;
   });
