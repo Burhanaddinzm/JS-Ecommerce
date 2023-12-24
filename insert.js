@@ -1,10 +1,11 @@
+"use strict";
+
 import { products } from "./data.js";
+// import { filteredCategories, filteredColors, filteredSizes } from "./script.js";
 
 const categoryList = document.getElementById("categoryList");
 const colorList = document.getElementById("colorList");
 const sizeList = document.getElementById("sizeList");
-
-const productsEl = document.getElementById("products");
 
 const categories = [...new Set(products.map((product) => product.category))];
 const colors = [...new Set(products.map((product) => product.color))];
@@ -35,34 +36,3 @@ sizes.forEach((size) => {
       <button class="uppercase w-full h-full">${size}</button>
     </li>`;
 });
-
-products.forEach((product) => {
-  const pName = product.name
-    .split(" ")
-    .map((name) => name[0].toUpperCase() + name.slice(1))
-    .join(" ");
-
-  productsEl.innerHTML += `<div class="col-span-4 cursor-pointer">
-  <a href="#">
-  <div class="mb-4 border border-neutral-200 rounded-lg">
-  <img
-  src="${product.image}"
-  alt=""
-  class="w-full h-[500px]"
-  />
-  </div>
-  <div class="flex justify-between font-bold">
-  <div>
-  <h1 class="text-xl">${pName}</h1>
-  <p class="text-neutral-500">${product.category}</p>
-  </div>
-  <h1 class="text-2xl">
-  <span>${product.price}</span>
-  AZN
-  </h1>
-  </div>
-  </a>
-  </div>`;
-});
-
-console.log();
