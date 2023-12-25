@@ -1,4 +1,12 @@
 @font-face {
   font-family: "Satoshi";
-  src: url("../fonts/Satoshi-Variable.ttf")
+  src: url("../fonts/Satoshi-Variable.ttf");
+}
+
+@layer base {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 }
