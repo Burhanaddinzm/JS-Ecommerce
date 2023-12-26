@@ -5,17 +5,23 @@ const subtotal = document.getElementById("subtotal");
 
 const fetchedCartItems = JSON.parse(localStorage.getItem("cartItems"));
 
-let totalPrice = 0;
-
 cartList.innerHTML = "";
+
+const updateSubtotal = () => {
+  let totalPrice = 0;
+  fetchedCartItems.forEach((item) => {
+    totalPrice += +(item.price * item.count);
+    subtotal.textContent = `${totalPrice} AZN`;
+  });
+};
 
 const updateList = () => {
   cartList.innerHTML = "";
+
   fetchedCartItems.forEach((item) => {
     let priceContent = "";
 
-    totalPrice += +(item.price * item.count);
-    subtotal.textContent = `${totalPrice} AZN`;
+    updateSubtotal();
 
     if (item.count > 1) {
       priceContent = `<span>${item.count} x ${
@@ -84,6 +90,8 @@ fetchedCartItems.forEach((item, index) => {
     if (item.count > 1) {
       item.count--;
       counterEl[index].value = item.count;
+      updateSubtotal();
+      localStorage.setItem("cartItems", JSON.stringify(fetchedCartItems));
     }
   });
 
@@ -91,12 +99,14 @@ fetchedCartItems.forEach((item, index) => {
     if (item.count < 10) {
       item.count++;
       counterEl[index].value = item.count;
+      updateSubtotal();
+      localStorage.setItem("cartItems", JSON.stringify(fetchedCartItems));
     }
   });
   removeBtn[index].addEventListener("click", () => {
     const indexOfItem = fetchedCartItems.indexOf(item);
     fetchedCartItems.splice(indexOfItem, 1);
-    localStorage.setItem("cartItems", JSON.stringify(fetchedCartItems));
     updateList();
+    localStorage.setItem("cartItems", JSON.stringify(fetchedCartItems));
   });
 });
