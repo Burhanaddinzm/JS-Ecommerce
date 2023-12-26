@@ -113,16 +113,14 @@ addToCart.addEventListener("click", () => {
   };
 
   //KASHA-Brainrot (finish task :)) C# in zibilleri, nest haven!
-  let existingProductIndex;
-
   if (!fetchedCartItems) {
     cartItems.push(addedProduct);
-  } else if (existingProductIndex !== -1) {
-    existingProductIndex = fetchedCartItems.findIndex(
+  } else if (fetchedCartItems.length !== 0) {
+    let existingProductIndex = fetchedCartItems.findIndex(
       (item) =>
         item.name === addedProduct.name && item.size === addedProduct.size
     );
-    if (fetchedCartItems.length !== 0) {
+    if (existingProductIndex !== -1) {
       const newCount = fetchedCartItems[existingProductIndex].count + count;
       if (fetchedCartItems[existingProductIndex].count === 10) {
         fetchedCartItems[existingProductIndex].count = 10;
