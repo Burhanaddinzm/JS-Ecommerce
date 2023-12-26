@@ -1,24 +1,32 @@
 "use strict";
 
 const cartList = document.getElementById("cartList");
+const subtotal = document.getElementById("subtotal");
 
 const fetchedCartItems = JSON.parse(localStorage.getItem("cartItems"));
+
+let totalPrice = 0;
+
 cartList.innerHTML = "";
 
-fetchedCartItems.forEach((item) => {
-  let priceContent = "";
+const updateList = () => {
+  cartList.innerHTML = "";
+  fetchedCartItems.forEach((item) => {
+    let priceContent = "";
 
-  if (item.count > 1) {
-    priceContent = `<span>${item.count} x ${
-      item.price
-    } AZN | <span class="font-black">${
-      item.count * item.price
-    } AZN</span></span>`;
-  } else {
-    priceContent = `${item.price} AZN`;
-  }
+    totalPrice += +(item.price * item.count);
+    subtotal.textContent = `${totalPrice} AZN`;
 
-  cartList.innerHTML += ` <div class="flex gap-5 h-96 min-w-fit">
+    if (item.count > 1) {
+      priceContent = `<span>${item.count} x ${
+        item.price
+      } AZN | <span class="font-black">${
+        item.count * item.price
+      } AZN</span></span>`;
+    } else {
+      priceContent = `<span>${item.price} AZN</span>`;
+    }
+    cartList.innerHTML += ` <div class="flex gap-5 h-96 min-w-fit">
   <div class="border border-neutral-200 rounded-lg">
     <img src="${item.image}" alt="" class="h-full" />
   </div>
@@ -44,17 +52,17 @@ fetchedCartItems.forEach((item) => {
     </div>
     <div>
       <div class="flex items-center gap-6 font-black mb-8">
-        <button class="text-3xl">-</button
+        <button class="text-3xl minus-btn">-</button
         ><input
           type="number"
           min="1"
           max="10"
-          class="border h-14 text-2xl text-center rounded-md"
+          class="border h-14 text-2xl text-center rounded-md counter"
           value="${item.count}"
-        /><button class="text-3xl">+</button>
+        /><button class="text-3xl plus-btn">+</button>
       </div>
       <button
-        class="flex items-center justify-between rounded-lg font-black uppercase text-white bg-black text-medium px-4 py-3 w-72"
+        class="flex items-center justify-between rounded-lg font-black uppercase text-white bg-black text-medium px-4 py-3 w-72 remove-btn"
       >
         Remove
         <img src="../assets/icons/remove.svg" alt="" />
@@ -62,4 +70,33 @@ fetchedCartItems.forEach((item) => {
     </div>
   </div>
 </div>`;
+  });
+};
+updateList();
+
+const decreaseBtn = document.querySelectorAll(".minus-btn");
+const increaseBtn = document.querySelectorAll(".plus-btn");
+const counterEl = document.querySelectorAll(".counter");
+const removeBtn = document.querySelectorAll(".remove-btn");
+
+fetchedCartItems.forEach((item, index) => {
+  decreaseBtn[index].addEventListener("click", () => {
+    if (item.count > 1) {
+      item.count--;
+      counterEl[index].value = item.count;
+    }
+  });
+
+  increaseBtn[index].addEventListener("click", () => {
+    if (item.count < 10) {
+      item.count++;
+      counterEl[index].value = item.count;
+    }
+  });
+  removeBtn[index].addEventListener("click", () => {
+    const indexOfItem = fetchedCartItems.indexOf(item);
+    fetchedCartItems.splice(indexOfItem, 1);
+    localStorage.setItem("cartItems", JSON.stringify(fetchedCartItems));
+    updateList();
+  });
 });

@@ -112,8 +112,26 @@ addToCart.addEventListener("click", () => {
     count: count,
   };
 
+  //KASHA-Brainrot (finish task :)) C# in zibilleri, nest haven!
+  let existingProductIndex;
+
   if (!fetchedCartItems) {
     cartItems.push(addedProduct);
+  } else if (existingProductIndex !== -1) {
+    existingProductIndex = fetchedCartItems.findIndex(
+      (item) =>
+        item.name === addedProduct.name && item.size === addedProduct.size
+    );
+    if (fetchedCartItems.length !== 0) {
+      const newCount = fetchedCartItems[existingProductIndex].count + count;
+      if (fetchedCartItems[existingProductIndex].count === 10) {
+        fetchedCartItems[existingProductIndex].count = 10;
+        cartItems.push(...fetchedCartItems);
+      } else {
+        fetchedCartItems[existingProductIndex].count = newCount;
+        cartItems.push(...fetchedCartItems);
+      }
+    }
   } else {
     cartItems.push(...fetchedCartItems, addedProduct);
   }
