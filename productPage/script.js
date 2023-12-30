@@ -95,12 +95,13 @@ increaseBtn.addEventListener("click", () => {
   counterEl.value = count;
 });
 
-addToCart.addEventListener("click", () => {
+addToCart.addEventListener("click", (event) => {
+  const fetchedCartItems = JSON.parse(localStorage.getItem("cartItems"));
+
   if (!selectedSize) {
     alert("Please pick a size before adding to cart!");
     return;
   }
-  const fetchedCartItems = JSON.parse(localStorage.getItem("cartItems"));
 
   const addedProduct = {
     name: pName,
@@ -112,27 +113,29 @@ addToCart.addEventListener("click", () => {
     count: count,
   };
 
-  //KASHA-Brainrot (finish task :)) C# in zibilleri, nest haven!
   if (!fetchedCartItems) {
     cartItems.push(addedProduct);
-  } else if (fetchedCartItems.length !== 0) {
-    let existingProductIndex = fetchedCartItems.findIndex(
-      (item) =>
-        item.name === addedProduct.name && item.size === addedProduct.size
-    );
-    if (existingProductIndex !== -1) {
-      const newCount = fetchedCartItems[existingProductIndex].count + count;
-      if (fetchedCartItems[existingProductIndex].count === 10) {
-        fetchedCartItems[existingProductIndex].count = 10;
-        cartItems.push(...fetchedCartItems);
-      } else {
-        fetchedCartItems[existingProductIndex].count = newCount;
-        cartItems.push(...fetchedCartItems);
-      }
-    }
   } else {
     cartItems.push(...fetchedCartItems, addedProduct);
-  }
 
+    for (let i = 0; i < fetchedCartItems.length; i++) {
+      if (
+        fetchedCartItems[i].name === addedProduct.name &&
+        fetchedCartItems[i].size === addedProduct.size &&
+        fetchedCartItems[i].count !== 10
+      ) {
+        cartItems[i].count += addedProduct.count;
+        cartItems.splice(cartItems.length - 1, 1);
+      } else if (
+        fetchedCartItems[i].name === addedProduct.name &&
+        fetchedCartItems[i].size === addedProduct.size &&
+        fetchedCartItems[i].count === 10
+      ) {
+        cartItems.splice(cartItems.length - 1, 1);
+        alert("Product cound can't exceed 10");
+      }
+    }
+  }
   localStorage.setItem("cartItems", JSON.stringify(cartItems));
+  window.location.reload();
 });

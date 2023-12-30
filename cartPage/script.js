@@ -7,6 +7,16 @@ const fetchedCartItems = JSON.parse(localStorage.getItem("cartItems"));
 
 cartList.innerHTML = "";
 
+const checkCount = () => {
+  fetchedCartItems.forEach((item) => {
+    if (item.count > 10) {
+      item.count = 10;
+    }
+  });
+};
+
+checkCount();
+
 const updateSubtotal = () => {
   let totalPrice = 0;
   fetchedCartItems.forEach((item) => {
@@ -24,13 +34,12 @@ const updateList = () => {
     updateSubtotal();
 
     if (item.count > 1) {
-      priceContent = `<span>${item.count} x ${
+      priceContent = `<span id="itemPrice">${item.count} x ${
         item.price
-      } AZN | <span class="font-black">${
-        item.count * item.price
-      } AZN</span></span>`;
+      } AZN | <span class="font-black">
+      ${item.count * item.price} AZN</span></span>`;
     } else {
-      priceContent = `<span>${item.price} AZN</span>`;
+      priceContent = `<span id="itemPrice">${item.price} AZN</span>`;
     }
     cartList.innerHTML += ` <div class="flex gap-5 h-96 min-w-fit">
   <div class="border border-neutral-200 rounded-lg">
@@ -90,8 +99,8 @@ fetchedCartItems.forEach((item, index) => {
     if (item.count > 1) {
       item.count--;
       counterEl[index].value = item.count;
-      updateSubtotal();
       localStorage.setItem("cartItems", JSON.stringify(fetchedCartItems));
+      updateSubtotal();
     }
   });
 
@@ -99,14 +108,15 @@ fetchedCartItems.forEach((item, index) => {
     if (item.count < 10) {
       item.count++;
       counterEl[index].value = item.count;
-      updateSubtotal();
       localStorage.setItem("cartItems", JSON.stringify(fetchedCartItems));
+      updateSubtotal();
     }
   });
   removeBtn[index].addEventListener("click", () => {
     const indexOfItem = fetchedCartItems.indexOf(item);
     fetchedCartItems.splice(indexOfItem, 1);
     updateList();
+    window.location.reload();
     localStorage.setItem("cartItems", JSON.stringify(fetchedCartItems));
   });
 });
