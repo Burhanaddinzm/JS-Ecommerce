@@ -17,8 +17,6 @@ let count = 1;
 
 const cartItems = [];
 
-const sizeArray = ["xs", "s", "m", "l", "xl"];
-
 const { category, price, name, color, image, sizes } = JSON.parse(
   localStorage.getItem("product")
 );
@@ -37,7 +35,10 @@ productColor.classList.add(
 );
 
 //Create sizes from local storage
+const sizeArray = ["xs", "s", "m", "l", "xl"];
+
 const disabledSizes = [];
+
 let selectedSize = "";
 
 sizeArray.forEach((size) => {
@@ -95,7 +96,7 @@ increaseBtn.addEventListener("click", () => {
   counterEl.value = count;
 });
 
-addToCart.addEventListener("click", (event) => {
+addToCart.addEventListener("click", () => {
   const fetchedCartItems = JSON.parse(localStorage.getItem("cartItems"));
 
   if (!selectedSize) {
@@ -132,7 +133,7 @@ addToCart.addEventListener("click", (event) => {
         fetchedCartItems[i].count === 10
       ) {
         cartItems.splice(cartItems.length - 1, 1);
-        alert("Product count can't exceed 10");
+        alert("Product count can't exceed 10!");
         return;
       }
     }

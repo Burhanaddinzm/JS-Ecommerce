@@ -25,22 +25,23 @@ const updateSubtotal = () => {
   });
 };
 
+const updatePrice = (item) => {
+  let priceContent = "";
+
+  if (item.count > 1) {
+    priceContent = `<span id="itemPrice">${item.count} x ${
+      item.price
+    } AZN | <span class="font-black">
+      ${item.count * item.price} AZN</span></span>`;
+  } else {
+    priceContent = `<span id="itemPrice">${item.price} AZN</span>`;
+  }
+  return priceContent;
+};
 const updateList = () => {
   cartList.innerHTML = "";
 
   fetchedCartItems.forEach((item) => {
-    let priceContent = "";
-
-    updateSubtotal();
-
-    if (item.count > 1) {
-      priceContent = `<span id="itemPrice">${item.count} x ${
-        item.price
-      } AZN | <span class="font-black">
-      ${item.count * item.price} AZN</span></span>`;
-    } else {
-      priceContent = `<span id="itemPrice">${item.price} AZN</span>`;
-    }
     cartList.innerHTML += ` <div class="flex gap-5 h-96 min-w-fit">
   <div class="border border-neutral-200 rounded-lg">
     <img src="${item.image}" alt="" class="h-full" />
@@ -63,7 +64,7 @@ const updateList = () => {
       </div>
     </div>
     <div>
-      ${priceContent}
+      ${updatePrice(item)}
     </div>
     <div>
       <div class="flex items-center gap-6 font-black mb-8">
@@ -85,6 +86,8 @@ const updateList = () => {
     </div>
   </div>
 </div>`;
+
+    updateSubtotal();
   });
 };
 updateList();
@@ -95,12 +98,18 @@ const counterEl = document.querySelectorAll(".counter");
 const removeBtn = document.querySelectorAll(".remove-btn");
 
 fetchedCartItems.forEach((item, index) => {
+  cartList.addEventListener("click", (event) => {
+    // if (event.target.classList.contains("minus-btn")) {}
+    // if (event.target.classList.contains("plus-btn")) {}
+    // if (event.target.classList.contains("remove-btn")) {}
+  });
   decreaseBtn[index].addEventListener("click", () => {
     if (item.count > 1) {
       item.count--;
       counterEl[index].value = item.count;
       localStorage.setItem("cartItems", JSON.stringify(fetchedCartItems));
       updateSubtotal();
+      updatePrice(item);
     }
   });
 
@@ -110,6 +119,7 @@ fetchedCartItems.forEach((item, index) => {
       counterEl[index].value = item.count;
       localStorage.setItem("cartItems", JSON.stringify(fetchedCartItems));
       updateSubtotal();
+      updatePrice(item);
     }
   });
   removeBtn[index].addEventListener("click", () => {
