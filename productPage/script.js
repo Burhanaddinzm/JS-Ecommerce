@@ -133,6 +133,7 @@ addToCart.addEventListener("click", (event) => {
       ) {
         cartItems.splice(cartItems.length - 1, 1);
         alert("Product cound can't exceed 10");
+        return;
       }
     }
   }
