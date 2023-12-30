@@ -132,7 +132,7 @@ addToCart.addEventListener("click", (event) => {
         fetchedCartItems[i].count === 10
       ) {
         cartItems.splice(cartItems.length - 1, 1);
-        alert("Product cound can't exceed 10");
+        alert("Product count can't exceed 10");
         return;
       }
     }
